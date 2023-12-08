@@ -20,3 +20,16 @@ const SendSmsAndroid = NativeModules.SendSmsAndroid
 export function multiply(a: number, b: number): Promise<number> {
   return SendSmsAndroid.multiply(a, b);
 }
+
+export function sendSMS(
+  phoneNumber: string,
+  message: string
+): Promise<SmsResponse> {
+  return SendSmsAndroid.sendSMS(phoneNumber, message);
+}
+
+// create typescript type for the propmise return that holds a number id and string message
+export type SmsResponse = {
+  id: number;
+  message: string;
+};
