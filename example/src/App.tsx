@@ -4,7 +4,6 @@ import { StyleSheet, View, Text } from 'react-native';
 import { sendSMS, type SmsResponse } from 'react-native-send-sms-android';
 
 export default function App() {
-
   const logResult = (smsResult: SmsResponse) => {
     console.log(smsResult);
   };
