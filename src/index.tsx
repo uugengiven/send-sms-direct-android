@@ -20,7 +20,7 @@ const SendSmsAndroid = NativeModules.SendSmsAndroid
 export function sendSMS(
   phoneNumber: string,
   message: string,
-  timeout: number = 10000,
+  timeout: number = 10000
 ): Promise<SmsResponse> {
   const id = Math.floor(Math.random() * 1000000000); // this allows us to have intents for each message inside android
   return SendSmsAndroid.sendSMS(id, phoneNumber, message, timeout);

@@ -1,10 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import {
-  sendSMS,
-  type SmsResponse,
-} from 'react-native-send-sms-android';
+import { sendSMS, type SmsResponse } from 'react-native-send-sms-android';
 
 export default function App() {
 
