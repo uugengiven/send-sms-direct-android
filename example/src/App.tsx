@@ -2,17 +2,11 @@ import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
 import {
-  multiply,
   sendSMS,
   type SmsResponse,
 } from 'react-native-send-sms-android';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
 
   const logResult = (smsResult: SmsResponse) => {
     console.log(smsResult);
@@ -27,7 +21,6 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
       <Text onPress={clickyButton}>Clicky</Text>
     </View>
   );

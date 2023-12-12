@@ -17,19 +17,17 @@ const SendSmsAndroid = NativeModules.SendSmsAndroid
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return SendSmsAndroid.multiply(a, b);
-}
-
 export function sendSMS(
   phoneNumber: string,
-  message: string
+  message: string,
+  timeout: number = 10000,
 ): Promise<SmsResponse> {
-  return SendSmsAndroid.sendSMS(phoneNumber, message);
+  const id = Math.floor(Math.random() * 1000000000); // this allows us to have intents for each message inside android
+  return SendSmsAndroid.sendSMS(id, phoneNumber, message, timeout);
 }
 
 // create typescript type for the propmise return that holds a number id and string message
 export type SmsResponse = {
-  id: number;
-  message: string;
+  sentResponse: string[];
+  deliveredResponse: string[];
 };
