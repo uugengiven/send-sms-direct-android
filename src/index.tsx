@@ -6,28 +6,34 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const SendSmsAndroid = NativeModules.SendSmsAndroid
-  ? NativeModules.SendSmsAndroid
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+const SendSmsAndroid =
+  Platform.OS === 'android' && NativeModules.SendSmsAndroid
+    ? NativeModules.SendSmsAndroid
+    : new Proxy(
+        {},
+        {
+          get() {
+            throw new Error(LINKING_ERROR);
+          },
+        }
+      );
 
 export function sendSMS(
   phoneNumber: string,
   message: string,
   timeout: number = 10000
 ): Promise<SmsResponse> {
-  const id = Math.floor(Math.random() * 1000000000); // this allows us to have intents for each message inside android
+  if (Platform.OS === 'ios') {
+    return Promise.reject('iOS not supported');
+  }
+  const id = Math.floor(Math.random() * 10000000); // this allows us to have intents for each message inside android
   return SendSmsAndroid.sendSMS(id, phoneNumber, message, timeout);
 }
 
 // create typescript type for the propmise return that holds a number id and string message
 export type SmsResponse = {
+  messageId: number;
+  messageCount: number;
   sentResponse: string[];
   deliveredResponse: string[];
 };
