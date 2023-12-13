@@ -1,8 +1,7 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, Platform, NativeEventEmitter } from 'react-native';
 
 const LINKING_ERROR =
   `The package 'react-native-send-sms-android' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
@@ -18,22 +17,33 @@ const SendSmsAndroid =
         }
       );
 
-export function sendSMS(
+export function addDeliveryListener(callback: Function): Function {
+  const eventEmitter = new NativeEventEmitter(NativeModules.SendSmsAndroid);
+  let eventListener = eventEmitter.addListener('EventDelivered', (event) => {
+    callback(event);
+  });
+
+  // Removes the listener once unmounted
+  return () => {
+    eventListener.remove();
+  };
+}
+
+export function SendSms(
   phoneNumber: string,
-  message: string,
-  timeout: number = 10000
+  message: string
 ): Promise<SmsResponse> {
   if (Platform.OS === 'ios') {
     return Promise.reject('iOS not supported');
   }
   const id = Math.floor(Math.random() * 10000000); // this allows us to have intents for each message inside android
-  return SendSmsAndroid.sendSMS(id, phoneNumber, message, timeout);
+  return SendSmsAndroid.sendSMS(id, phoneNumber, message);
 }
 
-// create typescript type for the propmise return that holds a number id and string message
 export type SmsResponse = {
-  messageId: number;
-  messageCount: number;
-  sentResponse: string[];
-  deliveredResponse: string[];
+  id: number;
+  count: number;
+  errors: number;
+  results: string[];
+  result: string;
 };

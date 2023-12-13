@@ -1,6 +1,6 @@
 # react-native-send-sms-android
 
-Directly sends sms if possible in android
+Directly sends SMS if possible in Android, returns results as a promise.
 
 ## Installation
 
@@ -11,11 +11,21 @@ npm install react-native-send-sms-android
 ## Usage
 
 ```js
-import { multiply } from 'react-native-send-sms-android';
+import { SendSms, type SmsResponse } from 'react-native-send-sms-android';
 
 // ...
 
-const result = await multiply(3, 7);
+const logResult = (smsResult: SmsResponse) => {
+    console.log(`SMS sent successfully: ${smsResult.success}`);
+    console.log(smsResult);
+  };
+
+  const clickyButton = () => {
+    sendSMS(
+      '555-555-5555', // number to send SMS to, only supports sending to single number
+      'Hello there, this is potentially a very long text message and will properly be broken down into parts.', // message of SMS
+    ).then(logResult);
+  };
 ```
 
 ## Contributing
