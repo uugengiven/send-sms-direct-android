@@ -96,8 +96,6 @@ public class SendSmsAndroidModule extends ReactContextBaseJavaModule {
   private final String SUCCESS = "Success";
   private final String ERROR = "Error";
   private final String PARTIAL_SUCCESS = "Partial success";
-  private final String RESULT_SENT = "Sent";
-  private final String RESULT_SENDING = "Sending";
   private final String EVENT_DELIVERED = "EventDelivered";
 
   public SendSmsAndroidModule(ReactApplicationContext reactContext) {
@@ -114,8 +112,7 @@ public class SendSmsAndroidModule extends ReactContextBaseJavaModule {
     constants.put("SUCCESS", SUCCESS);
     constants.put("ERROR", ERROR);
     constants.put("PARTIAL_SUCCESS", PARTIAL_SUCCESS);
-    constants.put("RESULT_SENT", RESULT_SENT);
-    constants.put("RESULT_SENDING", RESULT_SENDING);
+    constants.put("EVENT_DELIVERED", EVENT_DELIVERED);
   }
 
   @Override
@@ -263,6 +260,7 @@ public class SendSmsAndroidModule extends ReactContextBaseJavaModule {
 
   private void resolvePromise(Integer messageId)
   {
+    Log.d(TAG, "resolvePromise called for " + messageId);
     SmsTracker tracker = messages.get(messageId);
     if(tracker == null)
     {
@@ -285,19 +283,12 @@ public class SendSmsAndroidModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void addListener(String eventName) {
-    if (listenerCount == 0) {
-      // Set up any upstream listeners or background tasks as necessary
-    }
-
     listenerCount += 1;
   }
 
   @ReactMethod
   public void removeListeners(Integer count) {
     listenerCount -= count;
-    if (listenerCount == 0) {
-      // Remove upstream listeners, stop unnecessary background tasks
-    }
   }
 
   @ReactMethod
